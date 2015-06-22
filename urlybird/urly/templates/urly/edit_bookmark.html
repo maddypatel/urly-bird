@@ -1,0 +1,13 @@
+{% extends "urly/base.html" %}
+
+{% block content %}
+    <h2>Edit Bookmark</h2>
+    <h3>Title: {{ bookmark.title }}</h3>
+    <form method="POST" action="{% url 'edit_bookmark' bookmark.id %}">
+        {% csrf_token %}
+        {{ edit_form.as_p }}
+
+        <!-- Provide a button to click to submit the form. -->
+        <input type="submit" name="submit" value="Edit"/>
+    </form>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "urly/base.html" %}
+
+{% block content %}
+    <h3>User: {{ bookmark.id }}</h3>
+    {% for bookmark in bookmarks %}
+        <div>
+        <ul>
+            <li><a href="{% url 'index' bookmark.id %}"> {{ bookmark.title }}</a> ShortUrl: {{ bookmark.shorurl }}
+                <form method="POST" action="{% url 'edit_bookmark' bookmark.id %}">
+                    {% csrf_token %}
+                    {{ edit_form.as_p }}
+
+                    <!-- Provide a button to click to submit the form. -->
+                    <input type="submit" name="submit" value="Edit Bookmark"/>
+                </form>
+                <form method="POST" action="{% url 'delete_bookmark' bookmark.id %}">
+                    {% csrf_token %}
+
+                    <!-- Provide a button to click to submit the form. -->
+                    <input type="submit" name="submit" value="Delete Bookmark"/>
+                </form>
+
+            </li>
+        </ul>
+        </div>
+    {% endfor %}
+{% endblock %}
+</html>

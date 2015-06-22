@@ -1,0 +1,12 @@
+{% extends "urly/base.html" %}
+{% load i18n %}
+
+{% block content %}
+  <h1>{% trans 'Shorten URL' %}</h1>
+
+  <form method="post" action="{% url 'shortenUrl' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" name="submit" value="Shorten"/>
+  </form>
+{% endblock %}

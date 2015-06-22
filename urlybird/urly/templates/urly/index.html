@@ -1,0 +1,16 @@
+{% extends "urly/base.html" %}
+
+{% block content %}
+    <h2>Bookmarks</h2>
+
+    {% for bookmark in bookmarks %}
+        <div>
+        <p>
+            <ul>
+            <li>Title: {{ bookmark.title }} | Description: {{ bookmark.description }} | ShortURL: {{ bookmark }}</li>
+            </ul>
+        </p>
+        </div>
+    {% endfor %}
+{% endblock %}
+</html>

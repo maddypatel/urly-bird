@@ -1,0 +1,13 @@
+{% extends "urly/base.html" %}
+
+{% block content %}
+    <h2>Delete Bookmark</h2>
+    <h3>Title: {{ bookmark.title }}</h3>
+
+    <form method="POST" action="{% url 'delete_bookmark' bookmark.id %}">
+        {% csrf_token %}
+
+        <!-- Provide a button to click to submit the form. -->
+        <input type="submit" name="submit" value="Delete"/>
+    </form>
+{% endblock %}
