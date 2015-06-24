@@ -15,21 +15,22 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Bookmark',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', auto_created=True, primary_key=True, serialize=False)),
+                ('id', models.AutoField(verbose_name='ID', primary_key=True, serialize=False, auto_created=True)),
                 ('title', models.CharField(max_length=255)),
                 ('description', models.CharField(max_length=255)),
-                ('url', models.URLField()),
-                ('shorturl', models.URLField()),
+                ('longurl', models.URLField()),
+                ('shorturl', models.CharField(max_length=8)),
                 ('time_created', models.DateTimeField(auto_now_add=True)),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, related_name='urly')),
             ],
         ),
         migrations.CreateModel(
             name='Click',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', auto_created=True, primary_key=True, serialize=False)),
+                ('id', models.AutoField(verbose_name='ID', primary_key=True, serialize=False, auto_created=True)),
                 ('timestamp', models.DateTimeField(auto_now_add=True)),
                 ('bookmark', models.ForeignKey(to='urly.Bookmark')),
+                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
         ),
     ]
