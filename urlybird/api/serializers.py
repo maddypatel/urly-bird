@@ -2,6 +2,8 @@ from rest_framework import serializers
 from urly.models import Bookmark, Click
 from rest_framework.fields import SerializerMethodField
 from rest_framework.reverse import reverse
+from django.contrib.auth.models import User
+from rest_framework import serializers
 
 
 class ClickSerializer(serializers.HyperlinkedModelSerializer):
@@ -36,3 +38,21 @@ class BookmarkSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Bookmark
         fields = ('id', 'url', 'title', 'description', 'longurl', 'shorturl', 'user', 'clicks', 'click_count', '_links')
+
+
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = User
+        fields = ('url', 'username', 'password', 'email')
+        write_only_fields = ('password',)
+
+        def create(self, validated_data):
+            user = User.objects.create(
+                username = validated_data['username'],
+                email = validated_data['email']
+            )
+
+            user.set_password(validated_data['password'])
+            user.save()
+
+            return user

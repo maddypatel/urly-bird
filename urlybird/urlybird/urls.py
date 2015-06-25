@@ -22,6 +22,7 @@ from api import views
 router = routers.DefaultRouter()
 router.register(r'bookmarks', views.BookmarkViewSet, base_name="bookmark")
 router.register(r'clicks', views.ClickViewSet, base_name="click")
+router.register(r'users', views.UserViewSet)
 
 urlpatterns = [
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
