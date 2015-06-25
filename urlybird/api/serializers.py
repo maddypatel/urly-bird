@@ -11,7 +11,7 @@ class ClickSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Click
-        fields = ('id', 'user', 'bookmark')
+        fields = ('user', 'bookmark')
 
 
 class ClickWithBookmarkSerializer(serializers.HyperlinkedModelSerializer):

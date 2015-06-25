@@ -10,3 +10,13 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
 class OwnsRelatedBookmark(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         return request.user == obj.bookmark.user
+
+class IsUser(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.method == "POST":
+            return request.user.is_anonymous()
+        else:
+            return True
+
+    def has_object_permission(self, request, view, obj):
+        return request.user == obj

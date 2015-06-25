@@ -1,7 +1,7 @@
 from urly.models import Bookmark, Click
 from api.serializers import BookmarkSerializer, ClickSerializer, ClickWithBookmarkSerializer, UserSerializer
 from rest_framework import viewsets, permissions, generics, filters
-from api.permissions import IsOwnerOrReadOnly, OwnsRelatedBookmark
+from api.permissions import IsOwnerOrReadOnly, IsUser
 from rest_framework.exceptions import PermissionDenied
 from django.db.models import Count
 from django.contrib.auth.models import User
@@ -46,11 +46,11 @@ class ClickCreateView(generics.ListCreateAPIView):
 
 
 class ClickDetailView(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = (permissions.IsAuthenticated,
-                          OwnsRelatedBookmark)
+    permission_classes = (permissions.IsAuthenticated,)
     serializer_class = ClickWithBookmarkSerializer
     queryset = Click.objects.all()
 
 class UserViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsUser, )
     queryset = User.objects.all()
     serializer_class = UserSerializer
