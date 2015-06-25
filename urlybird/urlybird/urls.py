@@ -15,24 +15,19 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-#from urly import views as v
+# from urly import views as v
 from rest_framework import routers
 from api import views
 
 router = routers.DefaultRouter()
-router.register(r'bookmark', views.BookmarkViewSet)
-router.register(r'click', views.ClickViewSet)
+router.register(r'bookmarks', views.BookmarkViewSet, base_name="bookmark")
+router.register(r'clicks', views.ClickViewSet, base_name="click")
 
 urlpatterns = [
-    url(r'^admin/', include(admin.site.urls)),
-    url('^', include('django.contrib.auth.urls')),
-    #url('^index$', v.index, name='index'),
-    # url(r'^register$', views.user_register, name='user_register'),
-    # url(r'^edit_bookmark/(?P<bookmark_id>\d*)$', views.edit_bookmark, name='edit_bookmark'),
-    # url(r'^delete_bookmark/(?P<bookmark_id>\d*)$', views.delete_bookmark, name='delete_bookmark'),
-    # url(r'^(?P<bookmark_id>\w{8})/?$', views.redirect_to_site, name='redirect_to_site'),
-    # url(r'^shortenUrl/?$', views.shortenUrl, name='shortenUrl'),
-    # #url(r'^user/(?P<user_id>\d+)$', views.user, name='user'),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^', include(router.urls)),
+    url(r'^admin/', include(admin.site.urls)),
+    url('^', include('django.contrib.auth.urls')),
+    url(r'^bookmarks/(?P<bookmark_pk>\d+)/clicks/$', views.ClickCreateView.as_view(), name="click-list"),
+    url(r'^clicks/(?P<pk>\d+)$', views.ClickDetailView.as_view(), name="click-detail"),
 ]

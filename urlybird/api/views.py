@@ -1,14 +1,19 @@
 from urly.models import Bookmark, Click
-from api.serializers import BookmarkSerializer, ClickSerializer
-from rest_framework import viewsets, permissions, generics
+from api.serializers import BookmarkSerializer, ClickSerializer, ClickWithBookmarkSerializer
+from rest_framework import viewsets, permissions, generics, filters
 from api.permissions import IsOwnerOrReadOnly, OwnsRelatedBookmark
 from rest_framework.exceptions import PermissionDenied
+from django.db.models import Count
+
 
 class BookmarkViewSet(viewsets.ModelViewSet):
-    queryset = Bookmark.objects.all()
     serializer_class = BookmarkSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,
+    permission_classes = (permissions.IsAuthenticated,
                           IsOwnerOrReadOnly)
+
+    def get_queryset(self):
+        return Bookmark.objects.filter(user=self.request.user).annotate(
+            click_count=Count('click', distinct=True))
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -23,12 +28,25 @@ class ClickViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
 
-class ClickCreateView(generics.CreateAPIView):
+class ClickCreateView(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = ClickSerializer
 
+    def initial(self, request, *args, **kwargs):
+        self.bookmark = Bookmark.objects.get(pk=kwargs['bookmark_pk'])
+        super().initial(request, *args, **kwargs)
+
+    def get_queryset(self):
+        return self.bookmark.click_set.all()
+
     def perform_create(self, serializer):
-        bookmark = serializer.validated_data['bookmark']
-        if self.request.user != bookmark.user:
+        if self.request.user != self.bookmark.user:
             raise PermissionDenied
-        serializer.save()
+        serializer.save(bookmark=self.bookmark)
+
+
+class ClickDetailView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (permissions.IsAuthenticated,
+                          OwnsRelatedBookmark)
+    serializer_class = ClickWithBookmarkSerializer
+    queryset = Click.objects.all()

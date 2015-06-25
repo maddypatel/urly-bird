@@ -28,7 +28,7 @@ class Click(models.Model):
 
 
 def create_user():
-    for i in range(1, 21):
+    for i in range(1, 31):
         user = User.objects.create_user(
             "user{}".format(i),
             "user{}@theironyard.com".format(i),
@@ -40,7 +40,7 @@ def create_user():
 def create_bookmarks():
     fake = Factory.create()
     for user in User.objects.all():
-        for _ in range(10):
+        for _ in range(random.randint(1, 30)):
             title = fake.word()
             description = fake.sentence(nb_words=4)
             longurl = fake.url()
@@ -55,10 +55,11 @@ def create_bookmarks():
 def create_clicks():
     fake = Factory.create()
     for bookmark in Bookmark.objects.all():
-        user = random.choice(User.objects.all())
-        timestamp = fake.date_time_this_month()
-        click = Click(user=user, bookmark=bookmark, timestamp=timestamp)
-        click.save()
+        for _ in range(random.randint(1, 50)):
+            user = random.choice(User.objects.all())
+            timestamp = fake.date_time_this_month()
+            click = Click(user=user, bookmark=bookmark, timestamp=timestamp)
+            click.save()
 
 
 def generate_shorturl():

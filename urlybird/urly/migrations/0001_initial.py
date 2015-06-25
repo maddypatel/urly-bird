@@ -15,22 +15,22 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Bookmark',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', primary_key=True, serialize=False, auto_created=True)),
+                ('id', models.AutoField(auto_created=True, primary_key=True, verbose_name='ID', serialize=False)),
                 ('title', models.CharField(max_length=255)),
                 ('description', models.CharField(max_length=255)),
                 ('longurl', models.URLField()),
                 ('shorturl', models.CharField(max_length=8)),
                 ('time_created', models.DateTimeField(auto_now_add=True)),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, related_name='urly')),
+                ('user', models.ForeignKey(related_name='urly', to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.CreateModel(
             name='Click',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', primary_key=True, serialize=False, auto_created=True)),
+                ('id', models.AutoField(auto_created=True, primary_key=True, verbose_name='ID', serialize=False)),
                 ('timestamp', models.DateTimeField(auto_now_add=True)),
                 ('bookmark', models.ForeignKey(to='urly.Bookmark')),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('user', models.ForeignKey(related_name='clicks', to=settings.AUTH_USER_MODEL)),
             ],
         ),
     ]
