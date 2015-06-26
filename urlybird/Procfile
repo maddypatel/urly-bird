@@ -1,0 +1,1 @@
+web: gunicorn urlybird.wsgi --log-file -

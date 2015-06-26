@@ -6,6 +6,7 @@ from rest_framework.exceptions import PermissionDenied
 from django.db.models import Count
 from django.contrib.auth.models import User
 
+
 class BookmarkViewSet(viewsets.ModelViewSet):
     serializer_class = BookmarkSerializer
     permission_classes = (permissions.IsAuthenticated,
@@ -50,7 +51,8 @@ class ClickDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ClickWithBookmarkSerializer
     queryset = Click.objects.all()
 
+
 class UserViewSet(viewsets.ModelViewSet):
-    permission_classes = (IsUser, )
+    permission_classes = (IsUser,)
     queryset = User.objects.all()
     serializer_class = UserSerializer
